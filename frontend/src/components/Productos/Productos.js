@@ -25,8 +25,8 @@ export default function Productos() {
   async function cargarDatos() {
     try {
       const [resProd, resCat] = await Promise.all([
-        axios.get('http://localhost:4000/api/productos'),
-axios.get('http://localhost:4000/api/productos/categorias'),
+        axios.get('https://granizados-sativa-production.up.railway.app/api/productos'),
+axios.get('https://granizados-sativa-production.up.railway.app/api/productos/categorias'),
       ]);
       setProductos(resProd.data.productos);
       setCategorias(resCat.data.categorias);
@@ -48,7 +48,7 @@ axios.get('http://localhost:4000/api/productos/categorias'),
         stock_minimo: producto.stock_minimo,
         tiene_licor:  producto.tiene_licor ? 'true' : 'false',
       });
-      setPreview(producto.imagen_url ? `http://localhost:4000${producto.imagen_url}` : null);
+      setPreview(producto.imagen_url ? `https://granizados-sativa-production.up.railway.app${producto.imagen_url}` : null);
       setEditandoId(producto.id);
     } else {
       setForm({ nombre: '', descripcion: '', precio: '', categoria_id: '', stock: '', stock_minimo: '5', tiene_licor: 'false' });
@@ -68,39 +68,35 @@ axios.get('http://localhost:4000/api/productos/categorias'),
     }
   }
 
-  async function guardar() {
-    if (!form.nombre || !form.precio || !form.categoria_id) {
-      setError('Nombre, precio y categoría son obligatorios.');
-      return;
-    }
-    const data = new FormData();
-    Object.entries(form).forEach(([k, v]) => data.append(k, v));
-    if (imagen) data.append('imagen', imagen);
-
-    try {
-      if (editandoId) {
-        await axios.put(`/api/productos/${editandoId}`, data);
-      } else {
-       if (editandoId) {
-  await axios.put(`http://localhost:4000/api/productos/${editandoId}`, data);
-} else {
-  await axios.post('http://localhost:4000/api/productos', data);
-}
-      }
-      setExito(editandoId ? 'Producto actualizado.' : 'Producto creado.');
-      setModalAbierto(false);
-      cargarDatos();
-      setTimeout(() => setExito(''), 3000);
-    } catch (e) {
-      setError(e.response?.data?.mensaje || 'Error al guardar.');
-    }
+ async function guardar() {
+  if (!form.nombre || !form.precio || !form.categoria_id) {
+    setError('Nombre, precio y categoría son obligatorios.');
+    return;
   }
+  const data = new FormData();
+  Object.entries(form).forEach(([k, v]) => data.append(k, v));
+  if (imagen) data.append('imagen', imagen);
 
-  async function eliminar(id) {
-    if (!window.confirm('¿Desactivar este producto?')) return;
-    await axios.delete(`/api/productos/${id}`);
+  try {
+    if (editandoId) {
+      await axios.put(`https://granizados-sativa-production.up.railway.app/api/productos/${editandoId}`, data);
+    } else {
+      await axios.post('https://granizados-sativa-production.up.railway.app/api/productos', data);
+    }
+    setExito(editandoId ? 'Producto actualizado.' : 'Producto creado.');
+    setModalAbierto(false);
     cargarDatos();
+    setTimeout(() => setExito(''), 3000);
+  } catch (e) {
+    setError(e.response?.data?.mensaje || 'Error al guardar.');
   }
+}
+
+async function eliminar(id) {
+  if (!window.confirm('¿Desactivar este producto?')) return;
+  await axios.delete(`https://granizados-sativa-production.up.railway.app/api/productos/${id}`);
+  cargarDatos();
+}
 
   const productosFiltrados = filtro === 'todos'
     ? productos
@@ -142,7 +138,7 @@ axios.get('http://localhost:4000/api/productos/categorias'),
           <div key={p.id} className="prod-card">
             <div className="prod-img-wrap">
               {p.imagen_url
-                ? <img src={`http://localhost:4000${p.imagen_url}`} alt={p.nombre} className="prod-img" />
+                ? <img src={`https://granizados-sativa-production.up.railway.app${p.imagen_url}`} alt={p.nombre} className="prod-img" />
                 : <div className="prod-img-placeholder">🧊</div>
               }
               {p.tiene_licor && <span className="badge-licor">🍹 Con licor</span>}
