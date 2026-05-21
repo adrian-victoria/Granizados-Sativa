@@ -1,0 +1,202 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+.caja-page {
+  min-height: 100vh;
+  background: #0a0a0a;
+  font-family: 'DM Sans', sans-serif;
+  padding: 32px 24px;
+}
+
+.caja-cargando {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 60vh; color: #888; font-size: 1.1rem;
+}
+
+.caja-contenido { max-width: 800px; margin: 0 auto; }
+
+.caja-header {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+}
+
+.caja-titulo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.8rem; color: #fff; letter-spacing: 2px;
+}
+
+.caja-estado-badge {
+  padding: 8px 20px; border-radius: 50px;
+  font-size: 0.88rem; font-weight: 600;
+}
+.caja-estado-badge.abierta {
+  background: rgba(0,200,100,0.15);
+  border: 1px solid rgba(0,200,100,0.3); color: #00c864;
+}
+.caja-estado-badge.cerrada {
+  background: rgba(230,48,48,0.15);
+  border: 1px solid rgba(230,48,48,0.3); color: #e63030;
+}
+
+.caja-exito {
+  background: rgba(0,200,100,0.1); border: 1px solid rgba(0,200,100,0.3);
+  color: #00c864; padding: 12px 16px; border-radius: 10px;
+  margin-bottom: 20px; font-size: 0.9rem;
+}
+.caja-error {
+  background: rgba(230,48,48,0.1); border: 1px solid rgba(230,48,48,0.3);
+  color: #ff8080; padding: 12px 16px; border-radius: 10px;
+  margin-bottom: 20px; font-size: 0.9rem;
+}
+
+/* Resumen caja abierta */
+.caja-resumen {
+  background: #141414; border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px; padding: 28px; display: flex;
+  flex-direction: column; gap: 24px; margin-bottom: 32px;
+}
+
+.caja-cajero { color: #fff; font-size: 0.95rem; }
+.caja-cajero strong { color: #e63030; }
+.caja-hora { color: #666; font-size: 0.82rem; margin-top: 2px; }
+.caja-base { color: #888; font-size: 0.85rem; margin-top: 6px; }
+.caja-base strong { color: #fff; }
+
+.caja-stats {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+}
+
+.caja-stat {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px; padding: 16px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.stat-label { font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.8px; }
+.stat-valor { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: #fff; }
+.stat-valor.verde  { color: #00c864; }
+.stat-valor.morado { color: #a855f7; }
+
+.caja-total-grande {
+  background: linear-gradient(135deg, rgba(230,48,48,0.15), rgba(124,58,237,0.15));
+  border: 1px solid rgba(230,48,48,0.2);
+  border-radius: 14px; padding: 20px 24px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.caja-total-grande span { color: #888; font-size: 0.9rem; }
+.caja-total-grande strong {
+  font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: #fff;
+}
+
+.btn-cerrar-caja {
+  padding: 14px; background: rgba(230,48,48,0.1);
+  border: 1.5px solid rgba(230,48,48,0.3); border-radius: 12px;
+  color: #e63030; font-family: 'DM Sans', sans-serif;
+  font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+}
+.btn-cerrar-caja:hover { background: #e63030; color: #fff; }
+
+/* Formulario cierre */
+.cierre-form {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 20px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.cierre-form h3 {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem;
+  color: #fff; letter-spacing: 1px;
+}
+
+.campo { display: flex; flex-direction: column; gap: 6px; }
+.campo label { font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.8px; }
+.campo input, .campo textarea {
+  padding: 11px 14px; background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.08); border-radius: 10px;
+  color: #fff; font-family: 'DM Sans', sans-serif; font-size: 0.92rem;
+  outline: none; transition: border-color 0.2s; resize: none;
+}
+.campo input:focus, .campo textarea:focus { border-color: #e63030; }
+
+.diferencia {
+  padding: 10px 14px; border-radius: 8px;
+  font-weight: 600; font-size: 0.9rem; text-align: center;
+}
+.diferencia.positiva { background: rgba(0,200,100,0.1); color: #00c864; }
+.diferencia.negativa { background: rgba(230,48,48,0.1); color: #ff8080; }
+
+.cierre-botones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.btn-cancelar {
+  padding: 11px; background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.1); border-radius: 10px;
+  color: #888; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s;
+}
+.btn-cancelar:hover { border-color: #555; color: #fff; }
+
+.btn-confirmar-cierre {
+  padding: 11px; background: #e63030; border: none;
+  border-radius: 10px; color: #fff; font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
+}
+.btn-confirmar-cierre:hover:not(:disabled) { background: #b01f1f; }
+.btn-confirmar-cierre:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Abrir caja */
+.caja-abrir {
+  background: #141414; border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px; padding: 40px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 16px; text-align: center; margin-bottom: 32px;
+}
+.caja-abrir-icon { font-size: 56px; }
+.caja-abrir h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: #fff; }
+.caja-abrir p { color: #666; font-size: 0.9rem; }
+.caja-abrir .campo { width: 100%; max-width: 300px; text-align: left; }
+
+.btn-abrir-caja {
+  padding: 14px 32px; background: #e63030; border: none;
+  border-radius: 12px; color: #fff; font-family: 'DM Sans', sans-serif;
+  font-size: 1rem; font-weight: 600; cursor: pointer;
+  transition: all 0.2s; box-shadow: 0 4px 20px rgba(230,48,48,0.3);
+  margin-top: 8px;
+}
+.btn-abrir-caja:hover:not(:disabled) { background: #b01f1f; transform: translateY(-1px); }
+.btn-abrir-caja:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Historial */
+.caja-historial { margin-top: 8px; }
+.historial-titulo {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem;
+  color: #fff; letter-spacing: 1px; margin-bottom: 16px;
+}
+
+.historial-lista { display: flex; flex-direction: column; gap: 10px; }
+
+.historial-item {
+  background: #141414; border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px; padding: 16px 20px;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+}
+
+.historial-fecha { display: flex; align-items: center; gap: 12px; }
+.historial-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.historial-dot.abierta { background: #00c864; }
+.historial-dot.cerrada { background: #555; }
+
+.h-fecha { color: #fff; font-size: 0.88rem; font-weight: 500; }
+.h-cajero { color: #666; font-size: 0.78rem; margin-top: 2px; }
+
+.historial-datos { display: flex; align-items: center; gap: 16px; }
+.h-ventas { color: #666; font-size: 0.82rem; }
+.h-total { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: #e63030; }
+.h-estado {
+  font-size: 0.72rem; padding: 3px 10px; border-radius: 50px; font-weight: 600;
+}
+.h-estado.abierta { background: rgba(0,200,100,0.15); color: #00c864; }
+.h-estado.cerrada { background: rgba(255,255,255,0.06); color: #555; }
+
+@media (max-width: 600px) {
+  .caja-page { padding: 20px 16px; }
+  .caja-stats { grid-template-columns: 1fr 1fr; }
+  .cierre-botones { grid-template-columns: 1fr; }
+}

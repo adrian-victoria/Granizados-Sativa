@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+.rep-page {
+  min-height: 100vh; background: #0a0a0a;
+  font-family: 'DM Sans', sans-serif; padding: 32px 24px;
+}
+.rep-cargando {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 60vh; color: #888; font-size: 1.1rem;
+}
+.rep-contenido { max-width: 1000px; margin: 0 auto; }
+
+.rep-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
+}
+.rep-titulo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.8rem; color: #fff; letter-spacing: 2px;
+}
+
+.rep-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.rep-tab {
+  padding: 9px 18px; background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(255,255,255,0.08); border-radius: 50px;
+  color: #666; font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.rep-tab:hover { border-color: #e63030; color: #fff; }
+.rep-tab.activo { background: #e63030; border-color: #e63030; color: #fff; font-weight: 600; }
+
+/* Cards */
+.rep-cards {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px; margin-bottom: 28px;
+}
+.rep-card {
+  background: #141414; border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px; padding: 20px 16px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; text-align: center;
+}
+.rep-card.rojo   { border-color: rgba(230,48,48,0.2); }
+.rep-card.verde  { border-color: rgba(0,200,100,0.2); }
+.rep-card.morado { border-color: rgba(124,58,237,0.2); }
+.rep-card-icon { font-size: 28px; }
+.rep-card-valor {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: #fff;
+}
+.rep-card-label { font-size: 0.72rem; color: #666; text-transform: uppercase; letter-spacing: 0.8px; }
+
+/* Sección */
+.rep-seccion { display: flex; flex-direction: column; gap: 20px; }
+.rep-seccion-titulo {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem;
+  color: #fff; letter-spacing: 1px;
+}
+
+.rep-grafica {
+  background: #141414; border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px; padding: 24px;
+}
+
+.rep-vacio {
+  background: #141414; border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px; padding: 40px;
+  text-align: center; color: #555; font-size: 0.95rem;
+}
+
+/* Resumen mes */
+.rep-resumen-mes {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+.rm-item {
+  background: #141414; border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px; padding: 16px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.rm-label { font-size: 0.72rem; color: #666; text-transform: uppercase; letter-spacing: 0.8px; }
+.rm-valor { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: #fff; }
+.rm-valor.rojo   { color: #e63030; }
+.rm-valor.verde  { color: #00c864; }
+.rm-valor.morado { color: #a855f7; }
+
+/* Pie */
+.rep-pie-wrap {
+  background: #141414; border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px; padding: 24px;
+}
+.rep-pie-titulo {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem;
+  color: #fff; letter-spacing: 1px; margin-bottom: 12px;
+}
+
+/* Tabla */
+.rep-tabla {
+  background: #141414; border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px; overflow: hidden;
+}
+.rep-tabla-header {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  padding: 12px 20px; background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.72rem; color: #555; text-transform: uppercase; letter-spacing: 0.8px;
+}
+.rep-tabla-fila {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.88rem; color: #888; transition: background 0.15s;
+}
+.rep-tabla-fila:hover { background: rgba(255,255,255,0.02); }
+.rep-tabla-fila:last-child { border-bottom: none; }
+.rep-tabla-fila .blanco { color: #fff; }
+.rep-tabla-fila .verde  { color: #00c864; }
+.rep-tabla-fila .morado { color: #a855f7; }
+.rep-tabla-fila .rojo   { color: #e63030; }
+
+.rep-rank { color: #555; font-weight: 600; }
+.rep-rank.top { color: #e63030; }
+
+/* Tabla top (4 columnas) */
+.rep-seccion:last-child .rep-tabla-header,
+.rep-seccion:last-child .rep-tabla-fila {
+  grid-template-columns: 40px 1fr 100px 140px;
+}
+
+@media (max-width: 600px) {
+  .rep-page { padding: 20px 16px; }
+  .rep-cards { grid-template-columns: repeat(2, 1fr); }
+  .rep-resumen-mes { grid-template-columns: repeat(2, 1fr); }
+  .rep-tabla-header, .rep-tabla-fila { grid-template-columns: repeat(3, 1fr); }
+  .rep-tabla-header span:nth-child(3),
+  .rep-tabla-fila span:nth-child(3) { display: none; }
+}

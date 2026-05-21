@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --rojo:         #e63030;
+  --rojo-oscuro:  #b01f1f;
+  --morado:       #7c3aed;
+  --morado-suave: #a855f7;
+  --negro:        #0a0a0a;
+  --negro-suave:  #1a1a1a;
+  --negro-card:   #141414;
+  --gris:         #2a2a2a;
+  --gris-texto:   #888888;
+  --blanco:       #ffffff;
+  --blanco-suave: #f0f0f0;
+
+  --fuente-titulo: 'Bebas Neue', sans-serif;
+  --fuente-cuerpo: 'DM Sans', sans-serif;
+
+  --radio-sm: 8px;
+  --radio-md: 12px;
+  --radio-lg: 20px;
+}
+
+html { font-size: 16px; }
+
+body {
+  font-family: var(--fuente-cuerpo);
+  background: var(--negro);
+  color: var(--blanco);
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--negro); }
+::-webkit-scrollbar-thumb {
+  background: var(--rojo);
+  border-radius: 3px;
+}
+
+::selection {
+  background: rgba(230, 48, 48, 0.3);
+  color: white;
+}
+
+button { font-family: inherit; }
+input, textarea, select { font-family: inherit; }
+a { text-decoration: none; color: inherit; }
