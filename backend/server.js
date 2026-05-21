@@ -18,8 +18,7 @@ const PORT = process.env.PORT || 4000;
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir);
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-app.use(express.json());
+app.use(cors({ origin: ['http://localhost:3000', 'https://thriving-perception-production-2ccd.up.railway.app'], credentials: true }));app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
