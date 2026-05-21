@@ -14,7 +14,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build"
   },
-  "proxy": "http://localhost:4000",
+  "proxy": "https://granizados-sativa-production.up.railway.app",
   "browserslist": {
     "production": [
       ">0.2%",

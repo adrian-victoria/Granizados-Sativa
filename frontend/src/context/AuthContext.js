@@ -19,7 +19,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   async function iniciarSesion(email, password) {
-    const { data } = await axios.post('http://localhost:4000/api/auth/login', { email, password });
+    const { data } = await axios.post('https://granizados-sativa-production.up.railway.app/api/auth/login', { email, password });
 
     localStorage.setItem('token',   data.token);
     localStorage.setItem('usuario', JSON.stringify(data.usuario));

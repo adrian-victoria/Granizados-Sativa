@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Admin.css';
 
-const API = 'http://localhost:4000';
+const API = 'https://granizados-sativa-production.up.railway.app';
 
 export default function Admin() {
   const [usuarios, setUsuarios]   = useState([]);
