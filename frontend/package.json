@@ -8,12 +8,14 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.0",
     "react-scripts": "5.0.1",
-    "recharts": "^3.8.1"
+    "recharts": "^3.8.1",
+    "serve": "^14.2.6"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build"
-  },
+  "start": "serve -s build -l 3000",
+  "build": "react-scripts build",
+  "dev": "react-scripts start"
+},
   "proxy": "https://granizados-sativa-production.up.railway.app",
   "browserslist": {
     "production": [
