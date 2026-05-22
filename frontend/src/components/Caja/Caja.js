@@ -77,11 +77,19 @@ export default function Caja() {
   }
 
   function formatHora(fecha) {
-    return new Date(fecha).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+    return new Date(fecha).toLocaleTimeString('es-CO', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
   }
 
   function formatFecha(fecha) {
-    return new Date(fecha).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
+    return new Date(fecha).toLocaleDateString('es-CO', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
   }
 
   if (cargando) return <div className="caja-cargando">Cargando caja...</div>;
@@ -245,12 +253,22 @@ export default function Caja() {
                     </div>
                     <div className="h-detalle-item">
                       <span>📊 Total en ventas</span>
-                      <span className="verde">{formatPeso(c.total_ventas)}</span>
+                      <span style={{color:'#00c864'}}>{formatPeso(c.total_ventas)}</span>
                     </div>
                     {c.monto_final !== null && (
-                      <div className={`h-detalle-item diferencia ${Number(c.monto_final) >= Number(c.monto_inicial) + Number(c.total_ventas) ? 'positiva' : 'negativa'}`}>
-                        <span>⚖️ Diferencia</span>
-                        <span>{formatPeso(Number(c.monto_final) - Number(c.monto_inicial) - Number(c.total_ventas))}</span>
+                      <div className="h-detalle-item" style={{
+                        background: Number(c.monto_final) >= Number(c.monto_inicial) + Number(c.total_ventas)
+                          ? 'rgba(0,200,100,0.1)' : 'rgba(230,48,48,0.1)',
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        marginTop: '4px'
+                      }}>
+                        <span style={{color: Number(c.monto_final) >= Number(c.monto_inicial) + Number(c.total_ventas) ? '#00c864' : '#ff8080'}}>
+                          ⚖️ Diferencia
+                        </span>
+                        <span style={{color: Number(c.monto_final) >= Number(c.monto_inicial) + Number(c.total_ventas) ? '#00c864' : '#ff8080', fontWeight: 600}}>
+                          {formatPeso(Number(c.monto_final) - Number(c.monto_inicial) - Number(c.total_ventas))}
+                        </span>
                       </div>
                     )}
                     {c.notas && (
