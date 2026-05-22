@@ -229,45 +229,45 @@ export default function Caja() {
                   <div className="historial-detalles">
                     <div className="h-detalle-item">
                       <span>🕐 Apertura</span>
-                      <span>{formatHora(c.fecha_apertura)}</span>
+                      <span>{formatHora( c.fecha_apertura)}</span>
                     </div>
                     {c.fecha_cierre && (
                       <div className="h-detalle-item">
                         <span>🔒 Cierre</span>
-                        <span>{formatHora(c.fecha_cierre)}</span>
+                        <span>{formatHora( c.fecha_cierre)}</span>
                       </div>
                     )}
                     <div className="h-detalle-item">
                       <span>💵 Base inicial</span>
-                      <span>{formatPeso(c.monto_inicial)}</span>
+                      <span>{formatPeso( c.monto_inicial)}</span>
                     </div>
                     {c.monto_final !== null && (
                       <div className="h-detalle-item">
                         <span>💰 Contado al cierre</span>
-                        <span>{formatPeso(c.monto_final)}</span>
+                        <span>{formatPeso( c.monto_final)}</span>
                       </div>
                     )}
                     <div className="h-detalle-item">
                       <span>🛒 Ventas realizadas</span>
-                      <span>{c.num_ventas} ventas</span>
+                      <span>{ c.num_ventas} ventas</span>
                     </div>
                     <div className="h-detalle-item">
                       <span>📊 Total en ventas</span>
-                      <span style={{color:'#00c864'}}>{formatPeso(c.total_ventas)}</span>
+                      <span style={{color:'#00c864'}}>{formatPeso( c.total_ventas)}</span>
                     </div>
                     {c.monto_final !== null && (
                       <div className="h-detalle-item" style={{
-                        background: Number(c.monto_final) >= Number(c.monto_inicial) + Number(c.total_ventas)
+                        background: Number(c.monto_final) >= Number( c.monto_inicial) + Number(c.total_ventas)
                           ? 'rgba(0,200,100,0.1)' : 'rgba(230,48,48,0.1)',
                         padding: '8px 12px',
                         borderRadius: '8px',
                         marginTop: '4px'
                       }}>
-                        <span style={{color: Number(c.monto_final) >= Number(c.monto_inicial) + Number(c.total_ventas) ? '#00c864' : '#ff8080'}}>
+                        <span style={{color: Number( c.monto_final) >= Number( c.monto_inicial) + Number( c.total_ventas) ? '#00c864' : '#ff8080'}}>
                           ⚖️ Diferencia
                         </span>
-                        <span style={{color: Number(c.monto_final) >= Number(c.monto_inicial) + Number(c.total_ventas) ? '#00c864' : '#ff8080', fontWeight: 600}}>
-                          {formatPeso(Number(c.monto_final) - Number(c.monto_inicial) - Number(c.total_ventas))}
+                        <span style={{color: Number( c.monto_final) >= Number( c.monto_inicial) + Number( c.total_ventas) ? '#00c864' : '#ff8080', fontWeight: 600}}>
+                          {formatPeso(Number( c.monto_final) - Number( c.monto_inicial) - Number( c.total_ventas))}
                         </span>
                       </div>
                     )}
