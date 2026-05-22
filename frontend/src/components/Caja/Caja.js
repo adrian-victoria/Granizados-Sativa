@@ -228,31 +228,31 @@ export default function Caja() {
 
                   <div className="historial-detalles">
                     <div className="h-detalle-item">
-                      <span>🕐 Apertura</span>
+                      <span>🕐 Apertura: </span>
                       <span>{formatHora( c.fecha_apertura)}</span>
                     </div>
                     {c.fecha_cierre && (
                       <div className="h-detalle-item">
-                        <span>🔒 Cierre</span>
+                        <span>🔒 Cierre: </span>
                         <span>{formatHora( c.fecha_cierre)}</span>
                       </div>
                     )}
                     <div className="h-detalle-item">
-                      <span>💵 Base inicial</span>
+                      <span>💵 Base inicial: </span>
                       <span>{formatPeso( c.monto_inicial)}</span>
                     </div>
                     {c.monto_final !== null && (
                       <div className="h-detalle-item">
-                        <span>💰 Contado al cierre</span>
+                        <span>💰 Contado al cierre: </span>
                         <span>{formatPeso( c.monto_final)}</span>
                       </div>
                     )}
                     <div className="h-detalle-item">
-                      <span>🛒 Ventas realizadas</span>
+                      <span>🛒 Ventas realizadas: </span>
                       <span>{ c.num_ventas} ventas</span>
                     </div>
                     <div className="h-detalle-item">
-                      <span>📊 Total en ventas</span>
+                      <span>📊 Total en ventas: </span>
                       <span style={{color:'#00c864'}}>{formatPeso( c.total_ventas)}</span>
                     </div>
                     {c.monto_final !== null && (
@@ -273,7 +273,7 @@ export default function Caja() {
                     )}
                     {c.notas && (
                       <div className="h-detalle-notas">
-                        <span>📝 Notas:</span>
+                        <span>📝 Notas: </span>
                         <p>{c.notas}</p>
                       </div>
                     )}
