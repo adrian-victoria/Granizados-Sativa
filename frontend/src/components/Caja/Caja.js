@@ -197,24 +197,68 @@ export default function Caja() {
           </div>
         )}
 
-        {/* Historial */}
+        {/* Historial mejorado */}
         {historial.length > 0 && (
           <div className="caja-historial">
             <h2 className="historial-titulo">Historial de Cajas</h2>
             <div className="historial-lista">
               {historial.map(c => (
-                <div key={c.id} className="historial-item">
-                  <div className="historial-fecha">
-                    <span className={`historial-dot ${c.estado === 'abierta' ? 'abierta' : 'cerrada'}`} />
-                    <div>
-                      <p className="h-fecha">{formatFecha(c.fecha_apertura)}</p>
-                      <p className="h-cajero">{c.cajero}</p>
+                <div key={c.id} className={`historial-item ${c.estado === 'abierta' ? 'abierta' : ''}`}>
+                  <div className="historial-top">
+                    <div className="historial-fecha">
+                      <span className={`historial-dot ${c.estado}`} />
+                      <div>
+                        <p className="h-fecha">{formatFecha(c.fecha_apertura)}</p>
+                        <p className="h-cajero">👤 {c.cajero}</p>
+                      </div>
+                    </div>
+                    <div className="historial-montos">
+                      <span className={`h-estado ${c.estado}`}>{c.estado}</span>
+                      <span className="h-total">{formatPeso(c.total_ventas)}</span>
                     </div>
                   </div>
-                  <div className="historial-datos">
-                    <span className="h-ventas">{c.num_ventas} ventas</span>
-                    <span className="h-total">{formatPeso(c.total_ventas)}</span>
-                    <span className={`h-estado ${c.estado}`}>{c.estado}</span>
+
+                  <div className="historial-detalles">
+                    <div className="h-detalle-item">
+                      <span>🕐 Apertura</span>
+                      <span>{formatHora(c.fecha_apertura)}</span>
+                    </div>
+                    {c.fecha_cierre && (
+                      <div className="h-detalle-item">
+                        <span>🔒 Cierre</span>
+                        <span>{formatHora(c.fecha_cierre)}</span>
+                      </div>
+                    )}
+                    <div className="h-detalle-item">
+                      <span>💵 Base inicial</span>
+                      <span>{formatPeso(c.monto_inicial)}</span>
+                    </div>
+                    {c.monto_final !== null && (
+                      <div className="h-detalle-item">
+                        <span>💰 Contado al cierre</span>
+                        <span>{formatPeso(c.monto_final)}</span>
+                      </div>
+                    )}
+                    <div className="h-detalle-item">
+                      <span>🛒 Ventas realizadas</span>
+                      <span>{c.num_ventas} ventas</span>
+                    </div>
+                    <div className="h-detalle-item">
+                      <span>📊 Total en ventas</span>
+                      <span className="verde">{formatPeso(c.total_ventas)}</span>
+                    </div>
+                    {c.monto_final !== null && (
+                      <div className={`h-detalle-item diferencia ${Number(c.monto_final) >= Number(c.monto_inicial) + Number(c.total_ventas) ? 'positiva' : 'negativa'}`}>
+                        <span>⚖️ Diferencia</span>
+                        <span>{formatPeso(Number(c.monto_final) - Number(c.monto_inicial) - Number(c.total_ventas))}</span>
+                      </div>
+                    )}
+                    {c.notas && (
+                      <div className="h-detalle-notas">
+                        <span>📝 Notas:</span>
+                        <p>{c.notas}</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
