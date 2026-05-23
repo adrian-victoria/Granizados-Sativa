@@ -17,6 +17,7 @@ export default function Ventas() {
   const [busqueda, setBusqueda]       = useState('');
   const [categoriaFiltro, setCategoriaFiltro] = useState('todos');
   const [categorias, setCategorias]   = useState([]);
+  const [billeteRecibido, setBilleteRecibido] = useState(0);
 
   useEffect(() => {
     cargarDatos();
@@ -86,6 +87,7 @@ export default function Ventas() {
       });
       setExito(`¡Venta de $${totalCarrito.toLocaleString()} registrada! 🎉`);
       setCarrito([]);
+      setBilleteRecibido(0);
       cargarDatos();
       setTimeout(() => setExito(''), 4000);
     } catch (e) {
@@ -199,13 +201,50 @@ export default function Ventas() {
               <div className="v-metodo">
                 <button
                   className={`v-metodo-btn ${metodoPago === 'efectivo' ? 'activo' : ''}`}
-                  onClick={() => setMetodoPago('efectivo')}
+                  onClick={() => { setMetodoPago('efectivo'); setBilleteRecibido(0); }}
                 >💵 Efectivo</button>
                 <button
                   className={`v-metodo-btn ${metodoPago === 'transferencia' ? 'activo' : ''}`}
-                  onClick={() => setMetodoPago('transferencia')}
+                  onClick={() => { setMetodoPago('transferencia'); setBilleteRecibido(0); }}
                 >📱 Transferencia</button>
               </div>
+
+              {/* Calculadora de vueltas */}
+              {metodoPago === 'efectivo' && (
+                <div className="v-vueltas">
+                  <label>💵 Billete recibido</label>
+                  <div className="v-vueltas-inputs">
+                    {[5000, 10000, 20000, 50000, 100000].map(b => (
+                      <button
+                        key={b}
+                        className={`v-billete ${billeteRecibido === b ? 'activo' : ''}`}
+                        onClick={() => setBilleteRecibido(b)}
+                      >
+                        ${b.toLocaleString()}
+                      </button>
+                    ))}
+                  </div>
+                  <input
+                    type="number"
+                    className="v-billete-input"
+                    placeholder="O escribe el monto..."
+                    value={billeteRecibido || ''}
+                    onChange={e => setBilleteRecibido(Number(e.target.value))}
+                  />
+                  {billeteRecibido > 0 && billeteRecibido >= totalCarrito && (
+                    <div className="v-devuelta">
+                      <span>Devuelta</span>
+                      <strong>${(billeteRecibido - totalCarrito).toLocaleString()}</strong>
+                    </div>
+                  )}
+                  {billeteRecibido > 0 && billeteRecibido < totalCarrito && (
+                    <div className="v-devuelta negativa">
+                      <span>Falta</span>
+                      <strong>${(totalCarrito - billeteRecibido).toLocaleString()}</strong>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <button
                 className={`v-cobrar ${procesando ? 'procesando' : ''}`}
@@ -215,7 +254,7 @@ export default function Ventas() {
                 {procesando ? 'Registrando...' : `Cobrar $${totalCarrito.toLocaleString()}`}
               </button>
 
-              <button className="v-limpiar" onClick={() => setCarrito([])}>
+              <button className="v-limpiar" onClick={() => { setCarrito([]); setBilleteRecibido(0); }}>
                 Limpiar carrito
               </button>
             </div>

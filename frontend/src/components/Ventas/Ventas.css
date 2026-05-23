@@ -203,6 +203,60 @@
 .v-h-hora { font-size: 0.75rem; color: #555; margin-top: 2px; }
 .v-h-total { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: #e63030; }
 
+/* ── Calculadora de vueltas ─────────────────────────────── */
+.v-vueltas {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 14px; background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+}
+
+.v-vueltas label {
+  font-size: 0.78rem; color: #666;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.v-vueltas-inputs {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+
+.v-billete {
+  padding: 6px 10px; background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(255,255,255,0.1); border-radius: 8px;
+  color: #888; font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem; cursor: pointer; transition: all 0.2s;
+}
+.v-billete:hover { border-color: #e63030; color: #fff; }
+.v-billete.activo {
+  background: rgba(230,48,48,0.15);
+  border-color: #e63030; color: #e63030; font-weight: 600;
+}
+
+.v-billete-input {
+  width: 100%; padding: 9px 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.08); border-radius: 10px;
+  color: #fff; font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+  outline: none; transition: border-color 0.2s;
+}
+.v-billete-input:focus { border-color: #e63030; }
+.v-billete-input::placeholder { color: #444; }
+
+.v-devuelta {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 16px; background: rgba(0,200,100,0.12);
+  border: 1px solid rgba(0,200,100,0.3); border-radius: 10px;
+}
+.v-devuelta span { color: #00c864; font-size: 0.85rem; font-family: 'DM Sans', sans-serif; }
+.v-devuelta strong { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: #00c864; }
+
+.v-devuelta.negativa {
+  background: rgba(230,48,48,0.1);
+  border-color: rgba(230,48,48,0.3);
+}
+.v-devuelta.negativa span { color: #ff8080; }
+.v-devuelta.negativa strong { color: #ff8080; }
+
 /* Responsive */
 @media (max-width: 768px) {
   .v-page { grid-template-columns: 1fr; }
