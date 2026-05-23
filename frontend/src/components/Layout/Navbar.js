@@ -11,6 +11,7 @@ export default function Navbar() {
 
   const links = [
     { path: '/ventas',    label: 'Ventas',    icon: '🛒' },
+    { path: '/historial', label: 'Historial', icon: '📋' },
     { path: '/productos', label: 'Productos', icon: '🧊' },
     { path: '/caja',      label: 'Caja',      icon: '💰' },
     { path: '/reportes',  label: 'Reportes',  icon: '📊' },

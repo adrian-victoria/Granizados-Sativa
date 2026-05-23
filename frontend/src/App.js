@@ -8,6 +8,7 @@ import Navbar   from './components/Layout/Navbar';
 import Caja from './components/Caja/Caja';
 import Admin from './components/Admin/Admin';
 import Reportes from './components/Reportes/Reportes';
+import Historial from './components/Historial/Historial';
 
 function RutaProtegida({ children }) {
   const { usuario, cargando } = useAuth();
@@ -67,6 +68,11 @@ export default function App() {
 <Route path="/reportes" element={
   <RutaProtegida>
     <Layout><Reportes /></Layout>
+  </RutaProtegida>
+} />
+<Route path="/historial" element={
+  <RutaProtegida>
+    <Layout><Historial /></Layout>
   </RutaProtegida>
 } />
         </Routes>

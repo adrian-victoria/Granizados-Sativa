@@ -11,6 +11,7 @@ const ventasRoutes = require('./routes/ventas');
 const cajaRoutes = require('./routes/caja');
 const adminRoutes = require('./routes/admin');
 const reportesRoutes = require('./routes/reportes');
+const historialRoutes = require('./routes/historial');
 
 const app  = express();
 const PORT = process.env.PORT || 4000;
@@ -26,6 +27,7 @@ app.use('/api/auth',      authRoutes);
 app.use('/api/productos', productosRoutes);
 app.use('/api/ventas', ventasRoutes);
 app.use('/api/caja', cajaRoutes);
+app.use('/api/historial', historialRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/reportes', reportesRoutes);
 
