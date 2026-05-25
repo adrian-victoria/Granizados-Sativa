@@ -124,7 +124,7 @@ export default function Login() {
         </form>
 
         <p className="login-footer">
-          GraniSys v1.0 · Usuario por defecto: <strong>admin@granizados.com</strong>
+          SATIVA v1.0 · Usuario por defecto: <strong>admin@granizados.com</strong>
         </p>
       </div>
     </div>
