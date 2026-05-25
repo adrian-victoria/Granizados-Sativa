@@ -15,6 +15,8 @@ export default function Admin() {
   const [error, setError]         = useState('');
   const [exito, setExito]         = useState('');
   const [procesando, setProcesando] = useState(false);
+  const [mostrarNuevaPass, setMostrarNuevaPass] = useState(false);
+  const [mostrarPass, setMostrarPass] = useState(false);
 
   useEffect(() => { cargarDatos(); }, []);
 
@@ -95,7 +97,7 @@ export default function Admin() {
         {/* Header */}
         <div className="admin-header">
           <h1 className="admin-titulo">Panel Admin</h1>
-          <button className="btn-nuevo-usuario" onClick={() => { setModalAbierto(true); setError(''); }}>
+          <button className="btn-nuevo-usuario" onClick={() => { setModalAbierto(true); setError(''); setMostrarPass(false); }}>
             + Nuevo usuario
           </button>
         </div>
@@ -156,7 +158,7 @@ export default function Admin() {
                   <div className="usuario-acciones">
                     <button
                       className="btn-pass"
-                      onClick={() => { setModalPass(u); setNuevaPass(''); setError(''); }}
+                      onClick={() => { setModalPass(u); setNuevaPass(''); setError(''); setMostrarNuevaPass(false); }}
                       title="Cambiar contraseña"
                     >🔑</button>
                     <button
@@ -192,7 +194,26 @@ export default function Admin() {
               </div>
               <div className="campo">
                 <label>Contraseña * (mínimo 6 caracteres)</label>
-                <input type="password" value={form.password} onChange={e => setForm({...form, password: e.target.value})} placeholder="••••••••" />
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                  <input
+                    type={mostrarPass ? 'text' : 'password'}
+                    value={form.password}
+                    onChange={e => setForm({...form, password: e.target.value})}
+                    placeholder="••••••••"
+                    style={{ width: '100%', paddingRight: '40px' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setMostrarPass(v => !v)}
+                    style={{
+                      position: 'absolute', right: '10px',
+                      background: 'none', border: 'none',
+                      cursor: 'pointer', fontSize: '16px', opacity: 0.6
+                    }}
+                  >
+                    {mostrarPass ? '🙈' : '👁️'}
+                  </button>
+                </div>
               </div>
               <div className="campo">
                 <label>Rol</label>
@@ -222,15 +243,31 @@ export default function Admin() {
             </div>
             {error && <div className="modal-error">⚠️ {error}</div>}
             <div className="modal-body">
-              <p style={{color:'#888', fontSize:'0.9rem'}}>Usuario: <strong style={{color:'#fff'}}>{modalPass.nombre}</strong></p>
+              <p style={{color:'#888', fontSize:'0.9rem'}}>
+                Usuario: <strong style={{color:'#fff'}}>{modalPass.nombre}</strong>
+              </p>
               <div className="campo">
                 <label>Nueva contraseña *</label>
-                <input
-                  type="password"
-                  value={nuevaPass}
-                  onChange={e => setNuevaPass(e.target.value)}
-                  placeholder="Mínimo 6 caracteres"
-                />
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                  <input
+                    type={mostrarNuevaPass ? 'text' : 'password'}
+                    value={nuevaPass}
+                    onChange={e => setNuevaPass(e.target.value)}
+                    placeholder="Mínimo 6 caracteres"
+                    style={{ width: '100%', paddingRight: '40px' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setMostrarNuevaPass(v => !v)}
+                    style={{
+                      position: 'absolute', right: '10px',
+                      background: 'none', border: 'none',
+                      cursor: 'pointer', fontSize: '16px', opacity: 0.6
+                    }}
+                  >
+                    {mostrarNuevaPass ? '🙈' : '👁️'}
+                  </button>
+                </div>
               </div>
             </div>
             <div className="modal-footer">
