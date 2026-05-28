@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const AuthContext = createContext(null);
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:4000'; // ← único cambio
+const API = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 export function AuthProvider({ children }) {
   const [usuario, setUsuario]   = useState(null);
