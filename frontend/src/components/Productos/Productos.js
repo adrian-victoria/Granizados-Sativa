@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Productos.css';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:4000'; // ← único cambio
+const API = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 export default function Productos() {
   const [productos, setProductos]       = useState([]);

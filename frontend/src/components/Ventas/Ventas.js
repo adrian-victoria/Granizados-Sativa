@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Ventas.css';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 export default function Ventas() {
   const [productos, setProductos]     = useState([]);

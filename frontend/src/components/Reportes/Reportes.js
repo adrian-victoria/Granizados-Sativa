@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import './Reportes.css';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 const ROJO    = '#e63030';
 const MORADO  = '#7c3aed';
 const VERDE   = '#00c864';
