@@ -3,7 +3,7 @@ const { pool } = require('../config/database');
 // Ventas de los últimos 7 días
 async function ventasSemana(req, res) {
   try {
-    const [rows] = await pool.query(`
+    const { rows } = await pool.query(`
       SELECT 
         DATE(fecha) AS dia,
         COUNT(*) AS num_ventas,
@@ -11,7 +11,7 @@ async function ventasSemana(req, res) {
         COALESCE(SUM(CASE WHEN metodo_pago = 'efectivo' THEN total ELSE 0 END), 0) AS efectivo,
         COALESCE(SUM(CASE WHEN metodo_pago = 'transferencia' THEN total ELSE 0 END), 0) AS transferencia
       FROM ventas
-      WHERE fecha >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+      WHERE fecha >= CURRENT_DATE - INTERVAL '6 days'
       GROUP BY DATE(fecha)
       ORDER BY dia ASC
     `);
@@ -25,19 +25,19 @@ async function ventasSemana(req, res) {
 // Ventas del mes actual
 async function ventasMes(req, res) {
   try {
-    const [rows] = await pool.query(`
+    const { rows } = await pool.query(`
       SELECT 
         DATE(fecha) AS dia,
         COUNT(*) AS num_ventas,
         COALESCE(SUM(total), 0) AS total
       FROM ventas
-      WHERE MONTH(fecha) = MONTH(CURDATE())
-        AND YEAR(fecha) = YEAR(CURDATE())
+      WHERE EXTRACT(MONTH FROM fecha) = EXTRACT(MONTH FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM fecha)  = EXTRACT(YEAR FROM CURRENT_DATE)
       GROUP BY DATE(fecha)
       ORDER BY dia ASC
     `);
 
-    const [[resumen]] = await pool.query(`
+    const { rows: resumenRows } = await pool.query(`
       SELECT 
         COUNT(*) AS total_ventas,
         COALESCE(SUM(total), 0) AS total_monto,
@@ -45,11 +45,11 @@ async function ventasMes(req, res) {
         COALESCE(SUM(CASE WHEN metodo_pago = 'efectivo' THEN total ELSE 0 END), 0) AS efectivo,
         COALESCE(SUM(CASE WHEN metodo_pago = 'transferencia' THEN total ELSE 0 END), 0) AS transferencia
       FROM ventas
-      WHERE MONTH(fecha) = MONTH(CURDATE())
-        AND YEAR(fecha) = YEAR(CURDATE())
+      WHERE EXTRACT(MONTH FROM fecha) = EXTRACT(MONTH FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM fecha)  = EXTRACT(YEAR FROM CURRENT_DATE)
     `);
 
-    res.json({ datos: rows, resumen });
+    res.json({ datos: rows, resumen: resumenRows[0] });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al obtener reporte mensual.' });
   }
@@ -58,7 +58,7 @@ async function ventasMes(req, res) {
 // Productos más vendidos
 async function productosTop(req, res) {
   try {
-    const [rows] = await pool.query(`
+    const { rows } = await pool.query(`
       SELECT 
         p.nombre,
         p.precio,
@@ -67,7 +67,7 @@ async function productosTop(req, res) {
       FROM detalle_ventas d
       JOIN productos p ON d.producto_id = p.id
       JOIN ventas v ON d.venta_id = v.id
-      WHERE v.fecha >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+      WHERE v.fecha >= CURRENT_DATE - INTERVAL '30 days'
       GROUP BY p.id, p.nombre, p.precio
       ORDER BY total_vendido DESC
       LIMIT 10
@@ -81,7 +81,7 @@ async function productosTop(req, res) {
 // Resumen de hoy
 async function resumenHoy(req, res) {
   try {
-    const [[hoy]] = await pool.query(`
+    const { rows } = await pool.query(`
       SELECT 
         COUNT(*) AS ventas,
         COALESCE(SUM(total), 0) AS total,
@@ -89,9 +89,9 @@ async function resumenHoy(req, res) {
         COALESCE(SUM(CASE WHEN metodo_pago = 'transferencia' THEN total ELSE 0 END), 0) AS transferencia,
         COALESCE(AVG(total), 0) AS promedio
       FROM ventas
-      WHERE DATE(fecha) = CURDATE()
+      WHERE DATE(fecha) = CURRENT_DATE
     `);
-    res.json({ hoy });
+    res.json({ hoy: rows[0] });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al obtener resumen de hoy.' });
   }

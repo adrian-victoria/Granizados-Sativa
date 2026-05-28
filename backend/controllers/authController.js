@@ -12,15 +12,13 @@ const { pool }  = require('../config/database');
 async function login(req, res) {
   const { email, password } = req.body;
 
-  // 1. Validar que vienen los campos
   if (!email || !password) {
     return res.status(400).json({ mensaje: 'Email y contraseña son obligatorios.' });
   }
 
   try {
-    // 2. Buscar usuario activo por email
-    const [rows] = await pool.query(
-      'SELECT * FROM usuarios WHERE email = ? AND activo = TRUE',
+    const { rows } = await pool.query(
+      'SELECT * FROM usuarios WHERE email = $1 AND activo = TRUE',
       [email.toLowerCase().trim()]
     );
 
@@ -30,13 +28,11 @@ async function login(req, res) {
 
     const usuario = rows[0];
 
-    // 3. Comparar la contraseña con el hash guardado
     const passwordValida = await bcrypt.compare(password, usuario.password);
     if (!passwordValida) {
       return res.status(401).json({ mensaje: 'Credenciales incorrectas.' });
     }
 
-    // 4. Generar token JWT con 8 horas de vigencia
     const payload = {
       id:     usuario.id,
       nombre: usuario.nombre,
@@ -48,7 +44,6 @@ async function login(req, res) {
       expiresIn: process.env.JWT_EXPIRES_IN || '8h',
     });
 
-    // 5. Responder con token y datos del usuario (sin la contraseña)
     res.json({
       mensaje: 'Inicio de sesión exitoso.',
       token,
@@ -83,9 +78,8 @@ async function registro(req, res) {
   }
 
   try {
-    // Verificar que el email no exista
-    const [existe] = await pool.query(
-      'SELECT id FROM usuarios WHERE email = ?',
+    const { rows: existe } = await pool.query(
+      'SELECT id FROM usuarios WHERE email = $1',
       [email.toLowerCase().trim()]
     );
 
@@ -93,17 +87,16 @@ async function registro(req, res) {
       return res.status(409).json({ mensaje: 'Ya existe un usuario con ese email.' });
     }
 
-    // Hashear la contraseña (10 rondas de salt)
     const hash = await bcrypt.hash(password, 10);
 
-    const [result] = await pool.query(
-      'INSERT INTO usuarios (nombre, email, password, rol) VALUES (?, ?, ?, ?)',
+    const { rows } = await pool.query(
+      'INSERT INTO usuarios (nombre, email, password, rol) VALUES ($1, $2, $3, $4) RETURNING id',
       [nombre.trim(), email.toLowerCase().trim(), hash, rol]
     );
 
     res.status(201).json({
       mensaje: 'Usuario creado exitosamente.',
-      usuarioId: result.insertId,
+      usuarioId: rows[0].id,
     });
 
   } catch (error) {
@@ -118,8 +111,8 @@ async function registro(req, res) {
  */
 async function perfil(req, res) {
   try {
-    const [rows] = await pool.query(
-      'SELECT id, nombre, email, rol, creado_en FROM usuarios WHERE id = ?',
+    const { rows } = await pool.query(
+      'SELECT id, nombre, email, rol, creado_en FROM usuarios WHERE id = $1',
       [req.usuario.id]
     );
 

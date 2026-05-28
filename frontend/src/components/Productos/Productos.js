@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Productos.css';
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:4000'; // ← único cambio
+
 export default function Productos() {
   const [productos, setProductos]       = useState([]);
   const [categorias, setCategorias]     = useState([]);
@@ -18,15 +20,13 @@ export default function Productos() {
   const [error, setError]     = useState('');
   const [exito, setExito]     = useState('');
 
-  useEffect(() => {
-    cargarDatos();
-  }, []);
+  useEffect(() => { cargarDatos(); }, []);
 
   async function cargarDatos() {
     try {
       const [resProd, resCat] = await Promise.all([
-        axios.get('https://granizados-sativa-production.up.railway.app/api/productos'),
-axios.get('https://granizados-sativa-production.up.railway.app/api/productos/categorias'),
+        axios.get(`${API}/api/productos`),
+        axios.get(`${API}/api/productos/categorias`),
       ]);
       setProductos(resProd.data.productos);
       setCategorias(resCat.data.categorias);
@@ -48,7 +48,7 @@ axios.get('https://granizados-sativa-production.up.railway.app/api/productos/cat
         stock_minimo: producto.stock_minimo,
         tiene_licor:  producto.tiene_licor ? 'true' : 'false',
       });
-      setPreview(producto.imagen_url ? `https://granizados-sativa-production.up.railway.app${producto.imagen_url}` : null);
+      setPreview(producto.imagen_url ? `${API}${producto.imagen_url}` : null);
       setEditandoId(producto.id);
     } else {
       setForm({ nombre: '', descripcion: '', precio: '', categoria_id: '', stock: '', stock_minimo: '5', tiene_licor: 'false' });
@@ -68,35 +68,35 @@ axios.get('https://granizados-sativa-production.up.railway.app/api/productos/cat
     }
   }
 
- async function guardar() {
-  if (!form.nombre || !form.precio || !form.categoria_id) {
-    setError('Nombre, precio y categoría son obligatorios.');
-    return;
-  }
-  const data = new FormData();
-  Object.entries(form).forEach(([k, v]) => data.append(k, v));
-  if (imagen) data.append('imagen', imagen);
-
-  try {
-    if (editandoId) {
-      await axios.put(`https://granizados-sativa-production.up.railway.app/api/productos/${editandoId}`, data);
-    } else {
-      await axios.post('https://granizados-sativa-production.up.railway.app/api/productos', data);
+  async function guardar() {
+    if (!form.nombre || !form.precio || !form.categoria_id) {
+      setError('Nombre, precio y categoría son obligatorios.');
+      return;
     }
-    setExito(editandoId ? 'Producto actualizado.' : 'Producto creado.');
-    setModalAbierto(false);
-    cargarDatos();
-    setTimeout(() => setExito(''), 3000);
-  } catch (e) {
-    setError(e.response?.data?.mensaje || 'Error al guardar.');
-  }
-}
+    const data = new FormData();
+    Object.entries(form).forEach(([k, v]) => data.append(k, v));
+    if (imagen) data.append('imagen', imagen);
 
-async function eliminar(id) {
-  if (!window.confirm('¿Desactivar este producto?')) return;
-  await axios.delete(`https://granizados-sativa-production.up.railway.app/api/productos/${id}`);
-  cargarDatos();
-}
+    try {
+      if (editandoId) {
+        await axios.put(`${API}/api/productos/${editandoId}`, data);
+      } else {
+        await axios.post(`${API}/api/productos`, data);
+      }
+      setExito(editandoId ? 'Producto actualizado.' : 'Producto creado.');
+      setModalAbierto(false);
+      cargarDatos();
+      setTimeout(() => setExito(''), 3000);
+    } catch (e) {
+      setError(e.response?.data?.mensaje || 'Error al guardar.');
+    }
+  }
+
+  async function eliminar(id) {
+    if (!window.confirm('¿Desactivar este producto?')) return;
+    await axios.delete(`${API}/api/productos/${id}`);
+    cargarDatos();
+  }
 
   const productosFiltrados = filtro === 'todos'
     ? productos
@@ -108,7 +108,6 @@ async function eliminar(id) {
 
   return (
     <div className="prod-page">
-      {/* Header */}
       <div className="prod-header">
         <div>
           <h1 className="prod-titulo">Productos</h1>
@@ -119,7 +118,6 @@ async function eliminar(id) {
 
       {exito && <div className="alerta-exito">✅ {exito}</div>}
 
-      {/* Filtros */}
       <div className="prod-filtros">
         {['todos', 'sin_licor', 'licor'].map(f => (
           <button
@@ -132,13 +130,12 @@ async function eliminar(id) {
         ))}
       </div>
 
-      {/* Grid de productos */}
       <div className="prod-grid">
         {productosFiltrados.map(p => (
           <div key={p.id} className="prod-card">
             <div className="prod-img-wrap">
               {p.imagen_url
-                ? <img src={`https://granizados-sativa-production.up.railway.app${p.imagen_url}`} alt={p.nombre} className="prod-img" />
+                ? <img src={`${API}${p.imagen_url}`} alt={p.nombre} className="prod-img" />
                 : <div className="prod-img-placeholder">🧊</div>
               }
               {p.tiene_licor && <span className="badge-licor">🍹 Con licor</span>}
@@ -158,7 +155,7 @@ async function eliminar(id) {
         ))}
       </div>
 
-      {/* Modal */}
+      {/* Modal — sin cambios */}
       {modalAbierto && (
         <div className="modal-overlay" onClick={() => setModalAbierto(false)}>
           <div className="modal" onClick={e => e.stopPropagation()}>
@@ -170,7 +167,6 @@ async function eliminar(id) {
             {error && <div className="modal-error">⚠️ {error}</div>}
 
             <div className="modal-body">
-              {/* Imagen */}
               <div className="campo-imagen">
                 <div className="img-preview" onClick={() => document.getElementById('inputImagen').click()}>
                   {preview

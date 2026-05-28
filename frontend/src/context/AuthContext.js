@@ -3,6 +3,8 @@ import axios from 'axios';
 
 const AuthContext = createContext(null);
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:4000'; // ← único cambio
+
 export function AuthProvider({ children }) {
   const [usuario, setUsuario]   = useState(null);
   const [cargando, setCargando] = useState(true);
@@ -19,7 +21,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   async function iniciarSesion(email, password) {
-    const { data } = await axios.post('https://granizados-sativa-production.up.railway.app/api/auth/login', { email, password });
+    const { data } = await axios.post(`${API}/api/auth/login`, { email, password }); // ← URL dinámica
 
     localStorage.setItem('token',   data.token);
     localStorage.setItem('usuario', JSON.stringify(data.usuario));

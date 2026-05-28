@@ -3,7 +3,7 @@ const { pool } = require('../config/database');
 // Verificar si hay caja abierta
 async function estadoCaja(req, res) {
   try {
-    const [cajas] = await pool.query(`
+    const { rows: cajas } = await pool.query(`
       SELECT c.*, u.nombre AS cajero
       FROM cajas c
       JOIN usuarios u ON c.usuario_id = u.id
@@ -16,21 +16,26 @@ async function estadoCaja(req, res) {
       return res.json({ abierta: false, caja: null });
     }
 
-    // Calcular total de ventas de esta caja
-    const [totales] = await pool.query(`
+    const { rows: totales } = await pool.query(`
       SELECT 
         COUNT(*) AS total_ventas,
         COALESCE(SUM(total), 0) AS total_efectivo,
         COALESCE(SUM(CASE WHEN metodo_pago = 'efectivo' THEN total ELSE 0 END), 0) AS efectivo,
         COALESCE(SUM(CASE WHEN metodo_pago = 'transferencia' THEN total ELSE 0 END), 0) AS transferencia
       FROM ventas
-      WHERE caja_id = ?
+      WHERE caja_id = $1
     `, [cajas[0].id]);
 
     res.json({
       abierta: true,
       caja: cajas[0],
-      resumen: totales[0]
+      resumen: {
+        ...totales[0],
+        total_ventas:   Number(totales[0].total_ventas),
+        total_efectivo: Number(totales[0].total_efectivo),
+        efectivo:       Number(totales[0].efectivo),
+        transferencia:  Number(totales[0].transferencia),
+      }
     });
   } catch (error) {
     console.error('[CAJA ERROR]', error);
@@ -44,23 +49,22 @@ async function abrirCaja(req, res) {
   const usuario_id = req.usuario.id;
 
   try {
-    // Verificar que no haya una caja abierta
-    const [cajas] = await pool.query(
-      'SELECT id FROM cajas WHERE estado = "abierta" LIMIT 1'
+    const { rows: cajas } = await pool.query(
+      "SELECT id FROM cajas WHERE estado = 'abierta' LIMIT 1"
     );
 
     if (cajas.length > 0) {
       return res.status(400).json({ mensaje: 'Ya hay una caja abierta.' });
     }
 
-    const [result] = await pool.query(
-      'INSERT INTO cajas (usuario_id, monto_inicial, estado) VALUES (?, ?, "abierta")',
+    const { rows } = await pool.query(
+      "INSERT INTO cajas (usuario_id, monto_inicial, estado) VALUES ($1, $2, 'abierta') RETURNING id",
       [usuario_id, monto_inicial || 0]
     );
 
     res.status(201).json({
       mensaje: 'Caja abierta exitosamente.',
-      cajaId: result.insertId
+      cajaId: rows[0].id
     });
   } catch (error) {
     console.error('[ABRIR CAJA ERROR]', error);
@@ -73,8 +77,8 @@ async function cerrarCaja(req, res) {
   const { monto_final, notas } = req.body;
 
   try {
-    const [cajas] = await pool.query(
-      'SELECT id FROM cajas WHERE estado = "abierta" LIMIT 1'
+    const { rows: cajas } = await pool.query(
+      "SELECT id FROM cajas WHERE estado = 'abierta' LIMIT 1"
     );
 
     if (cajas.length === 0) {
@@ -83,8 +87,8 @@ async function cerrarCaja(req, res) {
 
     await pool.query(
       `UPDATE cajas 
-       SET estado = "cerrada", fecha_cierre = NOW(), monto_final = ?, notas = ?
-       WHERE id = ?`,
+       SET estado = 'cerrada', fecha_cierre = NOW(), monto_final = $1, notas = $2
+       WHERE id = $3`,
       [monto_final || 0, notas || null, cajas[0].id]
     );
 
@@ -98,7 +102,7 @@ async function cerrarCaja(req, res) {
 // Historial de cajas
 async function historial(req, res) {
   try {
-    const [cajas] = await pool.query(`
+    const { rows: cajas } = await pool.query(`
       SELECT c.*, u.nombre AS cajero,
         COALESCE((SELECT SUM(total) FROM ventas WHERE caja_id = c.id), 0) AS total_ventas,
         COALESCE((SELECT COUNT(*) FROM ventas WHERE caja_id = c.id), 0) AS num_ventas

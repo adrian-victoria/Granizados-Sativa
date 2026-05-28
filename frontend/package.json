@@ -12,11 +12,10 @@
     "serve": "^14.2.6"
   },
   "scripts": {
-  "start": "serve -s build -l 3000",
-  "build": "react-scripts build",
-  "dev": "react-scripts start"
-},
-  "proxy": "https://granizados-sativa-production.up.railway.app",
+    "start": "serve -s build -l 3000",
+    "build": "react-scripts build",
+    "dev": "react-scripts start"
+  },
   "browserslist": {
     "production": [
       ">0.2%",

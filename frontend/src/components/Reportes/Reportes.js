@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import './Reportes.css';
 
-const API = 'https://granizados-sativa-production.up.railway.app';
+const API = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 const ROJO    = '#e63030';
 const MORADO  = '#7c3aed';
 const VERDE   = '#00c864';

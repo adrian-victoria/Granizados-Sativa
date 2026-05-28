@@ -1,31 +1,31 @@
 // config/database.js
-// Configura y exporta el pool de conexiones a MySQL
+// Configura y exporta el pool de conexiones a PostgreSQL (Supabase)
 
-const mysql = require('mysql2/promise');
+const { Pool } = require('pg');
 require('dotenv').config();
 
 // Pool de conexiones: reutiliza conexiones en lugar de abrir una nueva por petición
-const pool = mysql.createPool({
-  host:               process.env.DB_HOST     || 'localhost',
-  port:               process.env.DB_PORT     || 3306,
-  user:               process.env.DB_USER     || 'root',
-  password:           process.env.DB_PASSWORD || '',
-  database:           process.env.DB_NAME     || 'granizados_db',
-  waitForConnections: true,
-  connectionLimit:    10,   // máximo 10 conexiones simultáneas
-  queueLimit:         0,
-  charset:            'utf8mb4',
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false // necesario para Supabase
+  },
+  max: 10,          // máximo 10 conexiones simultáneas
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 });
 
 // Función de prueba — se llama al iniciar el servidor
 async function testConnection() {
+  let client;
   try {
-    const connection = await pool.getConnection();
-    console.log('✅ Conectado a MySQL correctamente');
-    connection.release(); // devolver al pool
+    client = await pool.connect();
+    console.log('✅ Conectado a PostgreSQL (Supabase) correctamente');
   } catch (error) {
-    console.error('❌ Error al conectar a MySQL:', error.message);
+    console.error('❌ Error al conectar a PostgreSQL:', error.message);
     process.exit(1); // detener el servidor si no hay BD
+  } finally {
+    if (client) client.release(); // devolver al pool siempre
   }
 }
 
