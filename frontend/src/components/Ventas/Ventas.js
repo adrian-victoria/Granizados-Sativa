@@ -107,7 +107,6 @@ export default function Ventas() {
 
   return (
     <div className="v-page">
-      {/* Panel izquierdo — productos */}
       <div className="v-izquierda">
         <div className="v-header">
           <h1 className="v-titulo">Nueva Venta</h1>
@@ -116,7 +115,6 @@ export default function Ventas() {
           </div>
         </div>
 
-        {/* Búsqueda y filtros */}
         <div className="v-filtros">
           <input
             className="v-busqueda"
@@ -139,13 +137,12 @@ export default function Ventas() {
           </div>
         </div>
 
-        {/* Grid de productos */}
         <div className="v-grid">
           {productosFiltrados.map(p => (
             <div key={p.id} className="v-prod" onClick={() => agregarAlCarrito(p)}>
               <div className="v-prod-img">
                 {p.imagen_url
-                  ? <img src={`${API}${p.imagen_url}`} alt={p.nombre} />
+                  ? <img src={p.imagen_url} alt={p.nombre} />
                   : <span>🧊</span>
                 }
               </div>
@@ -158,7 +155,6 @@ export default function Ventas() {
         </div>
       </div>
 
-      {/* Panel derecho — carrito */}
       <div className="v-derecha">
         <h2 className="v-carrito-titulo">🛒 Carrito</h2>
 
@@ -191,7 +187,6 @@ export default function Ventas() {
               ))}
             </div>
 
-            {/* Total y pago */}
             <div className="v-resumen">
               <div className="v-total">
                 <span>Total</span>
@@ -209,7 +204,6 @@ export default function Ventas() {
                 >📱 Transferencia</button>
               </div>
 
-              {/* Calculadora de vueltas */}
               {metodoPago === 'efectivo' && (
                 <div className="v-vueltas">
                   <label>💵 Billete recibido</label>
@@ -261,7 +255,6 @@ export default function Ventas() {
           </>
         )}
 
-        {/* Últimas ventas del día */}
         {ventas.length > 0 && (
           <div className="v-historial">
             <h3 className="v-historial-titulo">Ventas de hoy</h3>
