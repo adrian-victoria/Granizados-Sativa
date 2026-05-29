@@ -48,7 +48,7 @@ export default function Productos() {
         stock_minimo: producto.stock_minimo,
         tiene_licor:  producto.tiene_licor ? 'true' : 'false',
       });
-      setPreview(producto.imagen_url ? `${API}${producto.imagen_url}` : null);
+      setPreview(producto.imagen_url || null);
       setEditandoId(producto.id);
     } else {
       setForm({ nombre: '', descripcion: '', precio: '', categoria_id: '', stock: '', stock_minimo: '5', tiene_licor: 'false' });
@@ -135,7 +135,7 @@ export default function Productos() {
           <div key={p.id} className="prod-card">
             <div className="prod-img-wrap">
               {p.imagen_url
-                ? <img src={`${API}${p.imagen_url}`} alt={p.nombre} className="prod-img" />
+                ? <img src={p.imagen_url} alt={p.nombre} className="prod-img" />
                 : <div className="prod-img-placeholder">🧊</div>
               }
               {p.tiene_licor && <span className="badge-licor">🍹 Con licor</span>}
@@ -155,7 +155,6 @@ export default function Productos() {
         ))}
       </div>
 
-      {/* Modal — sin cambios */}
       {modalAbierto && (
         <div className="modal-overlay" onClick={() => setModalAbierto(false)}>
           <div className="modal" onClick={e => e.stopPropagation()}>
