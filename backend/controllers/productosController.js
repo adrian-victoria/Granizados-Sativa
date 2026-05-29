@@ -1,6 +1,21 @@
 const { pool } = require('../config/database');
-const path = require('path');
-const fs = require('fs');
+const { createClient } = require('@supabase/supabase-js');
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+);
+
+async function subirImagen(file) {
+  if (!file) return null;
+  const ext = file.originalname.split('.').pop();
+  const filename = `producto_${Date.now()}.${ext}`;
+  const { error } = await supabase.storage
+    .from('productos')
+    .upload(filename, file.buffer, { contentType: file.mimetype });
+  if (error) throw new Error(error.message);
+  return supabase.storage.from('productos').getPublicUrl(filename).data.publicUrl;
+}
 
 async function listar(req, res) {
   try {
@@ -20,11 +35,10 @@ async function listar(req, res) {
 
 async function crear(req, res) {
   const { nombre, descripcion, precio, categoria_id, stock, stock_minimo, tiene_licor } = req.body;
-  if (!nombre || !precio || !categoria_id) {
+  if (!nombre || !precio || !categoria_id)
     return res.status(400).json({ mensaje: 'Nombre, precio y categoría son obligatorios.' });
-  }
-  const imagen_url = req.file ? `/uploads/${req.file.filename}` : null;
   try {
+    const imagen_url = await subirImagen(req.file);
     const { rows } = await pool.query(
       `INSERT INTO productos (nombre, descripcion, precio, categoria_id, stock, stock_minimo, tiene_licor, imagen_url)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
@@ -40,26 +54,22 @@ async function crear(req, res) {
 async function editar(req, res) {
   const { id } = req.params;
   const { nombre, descripcion, precio, categoria_id, stock, stock_minimo, tiene_licor } = req.body;
-  const imagen_url = req.file ? `/uploads/${req.file.filename}` : undefined;
   try {
+    const imagen_url = await subirImagen(req.file);
     const campos = [];
     const valores = [];
-    let i = 1; // contador de placeholders para PostgreSQL
-
+    let i = 1;
     if (nombre)                     { campos.push(`nombre = $${i++}`);       valores.push(nombre); }
-    if (descripcion)                { campos.push(`descripcion = $${i++}`);  valores.push(descripcion); }
+    if (descripcion !== undefined)  { campos.push(`descripcion = $${i++}`);  valores.push(descripcion); }
     if (precio)                     { campos.push(`precio = $${i++}`);       valores.push(precio); }
     if (categoria_id)               { campos.push(`categoria_id = $${i++}`); valores.push(categoria_id); }
     if (stock !== undefined)        { campos.push(`stock = $${i++}`);        valores.push(stock); }
     if (stock_minimo !== undefined) { campos.push(`stock_minimo = $${i++}`); valores.push(stock_minimo); }
     if (tiene_licor !== undefined)  { campos.push(`tiene_licor = $${i++}`);  valores.push(tiene_licor === 'true'); }
     if (imagen_url)                 { campos.push(`imagen_url = $${i++}`);   valores.push(imagen_url); }
-
-    valores.push(id); // el id va al final como $i
-    await pool.query(
-      `UPDATE productos SET ${campos.join(', ')} WHERE id = $${i}`,
-      valores
-    );
+    if (campos.length === 0) return res.status(400).json({ mensaje: 'Nada que actualizar.' });
+    valores.push(id);
+    await pool.query(`UPDATE productos SET ${campos.join(', ')} WHERE id = $${i}`, valores);
     res.json({ mensaje: 'Producto actualizado.' });
   } catch (error) {
     console.error('[EDITAR ERROR]', error);
